@@ -28,21 +28,21 @@ public class Sequence
 		greenButton.open(1000);
 		greenLED.open(1000);
 		
+		//ArrayLists for answerKey and userAnswer.
+		ArrayList<Integer> sequenceKey = new ArrayList<Integer>();
+		ArrayList<Integer> userAnswer = new ArrayList<Integer>();
+
+		//Process that determines the sequence of the flashing lights.
+		//A for loop that assigns an integer of 0 or 1 to each value of null in the sequenceKey ArrayList.
 		int startingNumberOfColours = 3;
+		for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
+		{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
+			sequenceKey.add(indexToAssign, ((int)(Math.random() * 2)));
+		}
+		System.out.println("Starting game...");			
 		boolean continueGame = true;
 		while (continueGame == true)
 		{
-			//ArrayLists for answerKey and userAnswer. Currently fills ArrayList sequenceKey with 3 copies of null.
-			ArrayList<Integer> sequenceKey = new ArrayList<Integer>();
-			ArrayList<Integer> userAnswer = new ArrayList<Integer>();
-			
-			//Process that determines the sequence of the flashing lights.
-			//A for loop that assigns an integer of 0 or 1 to each value of null in the sequenceKey ArrayList.
-			for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
-			{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
-				sequenceKey.add(indexToAssign, ((int)(Math.random() * 2)));
-			}
-			
 			//A for loop that will flash an LED according to the number assigned at the current index position
 			for (int indexToFlash = 0; indexToFlash < sequenceKey.size(); indexToFlash++)
 			{
