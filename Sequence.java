@@ -37,7 +37,7 @@ public class Sequence
 		int startingNumberOfColours = 3;
 		for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
 		{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
-			sequenceKey.add(indexToAssign, ((int)(Math.random() * 2)));
+			sequenceKey.add((int)(Math.random() * 2));
 		}
 		
 		System.out.println("Starting game...");			
