@@ -52,14 +52,12 @@ public class Sequence
 					redLED.setState(true);
 					Thread.sleep(500);
 					redLED.setState(false);
-					System.out.println("red");
 				}
 				else //Only other option is 1, which is assigned to green.
 				{
 					greenLED.setState(true);
 					Thread.sleep(500);
 					greenLED.setState(false);
-					System.out.println("green");
 				}
 			}
 			
