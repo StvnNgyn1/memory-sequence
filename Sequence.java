@@ -1,6 +1,5 @@
 import com.phidget22.*;//Add Phidgets Library.
 import java.util.ArrayList;
-import java.util.Collections;
 public class Sequence 
 {
 	//Handle Exceptions
@@ -34,14 +33,14 @@ public class Sequence
 		while (continueGame == true)
 		{
 			//ArrayLists for answerKey and userAnswer. Currently fills ArrayList sequenceKey with 3 copies of null.
-			ArrayList<Integer> sequenceKey = new ArrayList<Integer>(Collections.nCopies(startingNumberOfColours, null));
+			ArrayList<Integer> sequenceKey = new ArrayList<Integer>();
 			ArrayList<Integer> userAnswer = new ArrayList<Integer>();
 			
 			//Process that determines the sequence of the flashing lights.
 			//A for loop that assigns an integer of 0 or 1 to each value of null in the sequenceKey ArrayList.
-			for (int indexToAssign = 0; indexToAssign < sequenceKey.size(); indexToAssign++)
+			for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
 			{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
-				sequenceKey.set(indexToAssign, ((int)(Math.random() * 2)));
+				sequenceKey.add(indexToAssign, ((int)(Math.random() * 2)));
 			}
 			
 			//A for loop that will flash an LED according to the number assigned at the current index position
@@ -59,6 +58,7 @@ public class Sequence
 					Thread.sleep(500);
 					greenLED.setState(false);
 				}
+				Thread.sleep(500);
 			}
 			
 			boolean completedAnswer = false;
@@ -96,6 +96,7 @@ public class Sequence
 					Thread.sleep(3000);
 					redLED.setState(false);
 					continueGame = false;
+					System.out.println("Game over...");
 				}
 				else
 				{
@@ -103,6 +104,7 @@ public class Sequence
 					Thread.sleep(3000);
 					greenLED.setState(false);
 					startingNumberOfColours += 1; //Adds 1 colour for the next level.
+					System.out.println("Starting next level...");
 				}
 			
 			}
