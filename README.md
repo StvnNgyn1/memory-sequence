@@ -1,4 +1,3 @@
-# memory-sequence
-Memory sequence/Simon says project for Phidgets.
+# sequence-memory
+Sequence memory/Simon says project for Phidgets.
 
-First Project
