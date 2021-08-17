@@ -39,6 +39,7 @@ public class Sequence
 		{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
 			sequenceKey.add(indexToAssign, ((int)(Math.random() * 2)));
 		}
+		
 		System.out.println("Starting game...");			
 		boolean continueGame = true;
 		while (continueGame == true)
@@ -61,8 +62,8 @@ public class Sequence
 				Thread.sleep(500);
 			}
 			
+			//While loop that checks if the users answer is complete			
 			boolean completedAnswer = false;
-			//While loop that checks if the users answer is complete
 			while (completedAnswer == false)
 			{
 				if (userAnswer.size() == sequenceKey.size())
