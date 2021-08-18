@@ -22,45 +22,45 @@ public class Sequence
 		greenLED.setHubPort(4);
 		greenLED.setIsHubPortDevice(true);
 		
-		//Event
-		redButton.addStateChangeListener(new DigitalInputStateChangeListener()
-		{
-			public void onStateChange(DigitalInputStateChangeEvent e)
-			{
-				System.out.println("State: " + e.getState());
-			}
-		});
-		greenButton.addStateChangeListener(new DigitalInputStateChangeListener()
-		{
-			public void onStateChange(DigitalInputStateChangeEvent e)
-			{
-				System.out.println("Green Button State: " + e.getState());
-			}
-				
-		});
-		
-		
 		//Open 
 		redButton.open(1000);
 		redLED.open(1000);
 		greenButton.open(1000);
 		greenLED.open(1000);
 		
-		//ArrayLists for answerKey and userAnswer.
+		//ArrayLists for sequenceKey(answer key) and userAnswer.
 		ArrayList<Integer> sequenceKey = new ArrayList<Integer>();
 		ArrayList<Integer> userAnswer = new ArrayList<Integer>();
 		
+		//Event
+		redButton.addStateChangeListener(new DigitalInputStateChangeListener()
+		{
+			public void onStateChange(DigitalInputStateChangeEvent e)
+			{
+				userAnswer.add(0);
+			}
+		});
+		greenButton.addStateChangeListener(new DigitalInputStateChangeListener()
+		{
+			public void onStateChange(DigitalInputStateChangeEvent e)
+			{
+				userAnswer.add(1);
+			}
+				
+		});
+		
 		//Process that determines the sequence of the flashing lights.
-		//A for loop that assigns an integer of 0 or 1 to each value of null in the sequenceKey ArrayList.
+		//A for loop that assigns an integer of 0 or 1 to the sequenceKey ArrayList until filled to startingNumberOfColours.
 		int startingNumberOfColours = 3;
 		for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
-		{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
+		{	//Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey
 			sequenceKey.add((int)(Math.random() * 2));
 		}
 		
-		//int numEvents = 0;
+		int numEvents = 0;
 		System.out.println("Starting game...");
 		boolean continueGame = true;
+		//Loop that keeps game going
 		while (continueGame == true)
 		{	
 			//A for loop that will flash an LED according to the number assigned at the current index position
@@ -112,16 +112,16 @@ public class Sequence
 			for (int indexToCompare = 0; indexToCompare < sequenceKey.size(); indexToCompare++)
 			{
 				if (userAnswer.get(indexToCompare) != sequenceKey.get(indexToCompare))
-				{
-					redLED.setState(true); //Indicates the user got the sequence incorrect
+				{//Indicates the user got the sequence incorrect
+					redLED.setState(true); 
 					Thread.sleep(3000);
 					redLED.setState(false);
 					continueGame = false;
 					System.out.print("Game over...");
 				}
 				else
-				{
-					greenLED.setState(true); //Indicates the user got the sequence correct
+				{//Indicates the user got the sequence correct
+					greenLED.setState(true); 
 					Thread.sleep(3000);
 					greenLED.setState(false);
 					startingNumberOfColours += 1; //Adds 1 colour for the next level.
