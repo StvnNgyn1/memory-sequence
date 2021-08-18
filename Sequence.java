@@ -37,14 +37,22 @@ public class Sequence
 		{
 			public void onStateChange(DigitalInputStateChangeEvent e)
 			{
-				userAnswer.add(0);
+				if(e.getState())
+				{
+					userAnswer.add(0);
+				}
+				
 			}
 		});
+		//Event
 		greenButton.addStateChangeListener(new DigitalInputStateChangeListener()
 		{
 			public void onStateChange(DigitalInputStateChangeEvent e)
 			{
-				userAnswer.add(1);
+				if(e.getState())
+				{
+					userAnswer.add(1);
+				}
 			}
 				
 		});
