@@ -8,6 +8,27 @@ namespace SequenceMemory
 {
     class Sequence
     {
+        //Global ArrayLists for sequenceKey(answer key) and userAnswer.
+        public static ArrayList sequenceKey = new ArrayList();
+        public static ArrayList userAnswer = new ArrayList();
+
+        //Event
+        private static void redButton_StateChange(object sender, Phidget22.Events.DigitalInputStateChangeEventArgs e)
+        {
+            if (e.State)
+            {
+                userAnswer.Add(0);
+            }
+        }
+        //Event
+        private static void greenButton_StateChange(object sender, Phidget22.Events.DigitalInputStateChangeEventArgs e)
+        {
+            if (e.State)
+            {
+                userAnswer.Add(1);
+            }
+        }
+
         static void Main(string[] args)
         {
             //Create | Create objects for your buttons and LEDs.
@@ -26,15 +47,15 @@ namespace SequenceMemory
             greenLED.HubPort = 4;
             greenLED.IsHubPortDevice = true;
 
+            //Subscribe to events
+            redButton.StateChange += redButton_StateChange;
+            greenButton.StateChange += greenButton_StateChange;
+
             //Open | Connect your program to your physical devices.
             redButton.Open(1000);
             redLED.Open(1000);
             greenButton.Open(1000);
             greenLED.Open(1000);
-
-            //ArrayLists for sequenceKey(answer key) and userAnswer.
-            var sequenceKey = new ArrayList();
-            var userAnswer = new ArrayList();
 
             //Proccess that determines the sequence of the flashing lights.
             //A for loop that assigns an integer of 0 or 1 to the sequenceKey ArrayList until filled to startingNumberOfColours.
