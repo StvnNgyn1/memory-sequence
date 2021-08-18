@@ -33,6 +33,19 @@ greenLED.openWaitForAttachment(1000)
 sequenceKey = []
 userAnswer = []
 
+#Event
+def onRedButton_StateChange(self, state):
+    if (state):
+        userAnswer.append(0)
+#Event
+def onGreenButton_StateChange(self, state):
+    if (state):
+        userAnswer.append(1)
+    
+#Subscribe to Events 
+redButton.setOnStateChangeHandler(onRedButton_StateChange)
+greenButton.setOnStateChangeHandler(onGreenButton_State_Change)
+    
 #Process that determines the sequence of the flashing lights.
 #A for loop that assigns an integer of 0 or 1 to the sequenceKey ArrayList until filled to startingNumberOfColours.
 startingNumberOfColours = 3
