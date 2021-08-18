@@ -1,6 +1,5 @@
 import com.phidget22.*;//Add Phidgets Library.
 import java.util.ArrayList;
-import java.util.Collections;
 public class Sequence 
 {
 	//Handle Exceptions
@@ -29,21 +28,22 @@ public class Sequence
 		greenButton.open(1000);
 		greenLED.open(1000);
 		
+		//ArrayLists for answerKey and userAnswer.
+		ArrayList<Integer> sequenceKey = new ArrayList<Integer>();
+		ArrayList<Integer> userAnswer = new ArrayList<Integer>();
+
+		//Process that determines the sequence of the flashing lights.
+		//A for loop that assigns an integer of 0 or 1 to each value of null in the sequenceKey ArrayList.
 		int startingNumberOfColours = 3;
+		for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
+		{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
+			sequenceKey.add((int)(Math.random() * 2));
+		}
+		
+		System.out.println("Starting game...");			
 		boolean continueGame = true;
 		while (continueGame == true)
 		{
-			//ArrayLists for answerKey and userAnswer. Currently fills ArrayList sequenceKey with 3 copies of null.
-			ArrayList<Integer> sequenceKey = new ArrayList<Integer>(Collections.nCopies(startingNumberOfColours, null));
-			ArrayList<Integer> userAnswer = new ArrayList<Integer>();
-			
-			//Process that determines the sequence of the flashing lights.
-			//A for loop that assigns an integer of 0 or 1 to each value of null in the sequenceKey ArrayList.
-			for (int indexToAssign = 0; indexToAssign < sequenceKey.size(); indexToAssign++)
-			{	//Randomly generates number between 0 and 1 to assign at the position indexToAssign
-				sequenceKey.set(indexToAssign, ((int)(Math.random() * 2)));
-			}
-			
 			//A for loop that will flash an LED according to the number assigned at the current index position
 			for (int indexToFlash = 0; indexToFlash < sequenceKey.size(); indexToFlash++)
 			{
@@ -52,19 +52,18 @@ public class Sequence
 					redLED.setState(true);
 					Thread.sleep(500);
 					redLED.setState(false);
-					System.out.println("red");
 				}
 				else //Only other option is 1, which is assigned to green.
 				{
 					greenLED.setState(true);
 					Thread.sleep(500);
 					greenLED.setState(false);
-					System.out.println("green");
 				}
+				Thread.sleep(500);
 			}
 			
+			//While loop that checks if the users answer is complete			
 			boolean completedAnswer = false;
-			//While loop that checks if the users answer is complete
 			while (completedAnswer == false)
 			{
 				if (userAnswer.size() == sequenceKey.size())
@@ -98,6 +97,7 @@ public class Sequence
 					Thread.sleep(3000);
 					redLED.setState(false);
 					continueGame = false;
+					System.out.println("Game over...");
 				}
 				else
 				{
@@ -105,6 +105,7 @@ public class Sequence
 					Thread.sleep(3000);
 					greenLED.setState(false);
 					startingNumberOfColours += 1; //Adds 1 colour for the next level.
+					System.out.println("Starting next level...");
 				}
 			
 			}
