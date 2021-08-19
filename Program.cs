@@ -8,6 +8,11 @@ namespace SequenceMemory
 {
     class Sequence
     {
+        //Global variable for the number of button events. Represents the number of answers recorded.
+        static int numEvents = 0;
+        //Turn on/off LEDs with Global Variables
+        static bool turnRedLEDOn = false;
+        static bool turnGreenLEDOn = false;
         //Global ArrayLists for sequenceKey(answer key) and userAnswer.
         public static ArrayList sequenceKey = new ArrayList();
         public static ArrayList userAnswer = new ArrayList();
@@ -15,17 +20,21 @@ namespace SequenceMemory
         //Event
         private static void redButton_StateChange(object sender, Phidget22.Events.DigitalInputStateChangeEventArgs e)
         {
+            turnRedLEDOn = e.State;
             if (e.State)
             {
                 userAnswer.Add(0);
+                numEvents++;
             }
         }
         //Event
         private static void greenButton_StateChange(object sender, Phidget22.Events.DigitalInputStateChangeEventArgs e)
         {
+            turnGreenLEDOn = e.State;
             if (e.State)
             {
                 userAnswer.Add(1);
+                numEvents++;
             }
         }
 
@@ -57,21 +66,24 @@ namespace SequenceMemory
             greenButton.Open(1000);
             greenLED.Open(1000);
 
-            //Proccess that determines the sequence of the flashing lights.
-            //A for loop that assigns an integer of 0 or 1 to the sequenceKey ArrayList until filled to startingNumberOfColours.
-            var startingNumberOfColours = 3;
+            //Creates random number generator
             Random RNG = new Random();
-            for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
-            {   //Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey
-                int randomNumber = RNG.Next(0, 2);
-                sequenceKey.Add(randomNumber);
-            }
 
-            Console.WriteLine("Starting game...");
-            Boolean continueGame = true;
+            var startingNumberOfColours = 3; //int variable stating the number of colours flashed the game will start with.
+            Console.WriteLine("Starting game, look at the LEDS.");
+            System.Threading.Thread.Sleep(1000);
+            bool continueGame = true; //Boolean that determines if while loop below should continue or not.
             //Loop that keeps game going
             while (continueGame  == true)
             {
+                sequenceKey.Clear(); //Ensures the sequence is reset for each level
+                //Proccess that determines the sequence of the flashing lights until the starting number of colours are met.
+                for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
+                {//Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey
+                    int randomNumber = RNG.Next(0, 2);
+                    sequenceKey.Add(randomNumber);
+                }
+
                 //A for loop that will flash an LED according to the number assigned at the current index position
                 for (int indexToFlash = 0; indexToFlash < sequenceKey.Count; indexToFlash++)
                 {
@@ -90,29 +102,41 @@ namespace SequenceMemory
                     System.Threading.Thread.Sleep(500);
                 }
 
-                //Block for eventual
-                //events buttons
-                //wooo
+                numEvents = 0; //resets number of events pressed before the user answers
+                userAnswer.Clear(); //clears ArrayList for the users answers before each answer
+                Console.WriteLine("Please enter your answer:");
+                while (numEvents < sequenceKey.Count) //While loop that checks if the users answer is complete
+                {
+                    redLED.State = turnRedLEDOn;
+                    greenLED.State = turnGreenLEDOn;
+                    System.Threading.Thread.Sleep(150);
+                }
 
-                //A for loop that will take in the users answers and compare it to the sequence answer key. Determines if the user is correct or incorrect. If correct, game moves on. If incorrect, game stops.
+                //A for loop that will take in the users answers and compare it to the sequence answer key. Determines if the user incorrect. if incorrect, the game will stop
                 for (int indexToCompare = 0; indexToCompare < sequenceKey.Count; indexToCompare++)
                 {
                     if (Convert.ToInt32(userAnswer[indexToCompare]) != Convert.ToInt32(sequenceKey[indexToCompare]))
                     {//Indicates the user got the sequence incorrect
                         redLED.State = true;
-                        System.Threading.Thread.Sleep(3000);
+                        Console.WriteLine("Game over...");
+                        System.Threading.Thread.Sleep(2000);
                         redLED.State = false;
                         continueGame = false;
-                        Console.WriteLine("Game over...");
-                    }
-                    else
-                    {//Indicates the user got the sequence correct
-                        greenLED.State = true;
-                        System.Threading.Thread.Sleep(3000);
-                        greenLED.State = false;
-                        startingNumberOfColours += 1;
-                        Console.WriteLine("Starting next level...");
-                    }
+                        break;
+                    }                       
+                }
+
+                if (continueGame) //If the user was correct on all, the game will continue
+                {
+                    //Indicates the user got the sequence correct
+                    greenLED.State = true;
+                    Console.WriteLine("Congrats!");
+                    System.Threading.Thread.Sleep(2000);
+                    greenLED.State = false;
+                    System.Threading.Thread.Sleep(1000);
+                    Console.WriteLine("\n" + "Starting next level...");
+                    System.Threading.Thread.Sleep(2000);
+                    startingNumberOfColours++;
                 }
                 System.Threading.Thread.Sleep(150);
             }
