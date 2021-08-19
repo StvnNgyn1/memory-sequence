@@ -98,7 +98,7 @@ public class Sequence
 			
 			numEvents = 0; //resets number of events pressed before the user answers
 			userAnswer.clear(); //clears ArrayList for the users answers before each answer
-			System.out.println("Please enter your answer");
+			System.out.println("Please enter your answer:");
 			while (numEvents < sequenceKey.size()) //While loop that checks if the users answer is complete
 			{
 				redLED.setState(turnRedLEDOn);
