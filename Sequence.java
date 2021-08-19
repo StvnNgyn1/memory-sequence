@@ -37,7 +37,7 @@ public class Sequence
 		ArrayList<Integer> sequenceKey = new ArrayList<Integer>();
 		ArrayList<Integer> userAnswer = new ArrayList<Integer>();
 		
-		//Event
+		//Event for red button
 		redButton.addStateChangeListener(new DigitalInputStateChangeListener()
 		{
 			public void onStateChange(DigitalInputStateChangeEvent e)
@@ -50,7 +50,7 @@ public class Sequence
 				}			
 			}
 		});
-		//Event
+		//Event for green button
 		greenButton.addStateChangeListener(new DigitalInputStateChangeListener()
 		{
 			public void onStateChange(DigitalInputStateChangeEvent e)
@@ -63,21 +63,22 @@ public class Sequence
 					numEvents++;
 				}
 			}			
-		});		
-		//int variable stating the number of colours flashed the game will start with.
-		int startingNumberOfColours = 3;
+		});
+		
+		int startingNumberOfColours = 3; //int variable stating the number of colours flashed the game will start with.
 		System.out.println("Starting game, look at the LEDs.");
 		Thread.sleep(1000);
-		boolean continueGame = true;
+		boolean continueGame = true; //Boolean that determines if while loop below should continue or not.
 		//Loop that keeps game going
-		while (continueGame == true)
+		while (continueGame == true) 
 		{
-			sequenceKey.clear();
-			//Process that determines the sequence of the flashing lights.
+			sequenceKey.clear(); //Ensures the sequence is reset for each level
+			//Process that determines the sequence of the flashing lights until the starting number of colours are met.
 			for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
-			{	//Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey
-				sequenceKey.add((int)(Math.random() * 2));
+			{	
+				sequenceKey.add((int)(Math.random() * 2)); //Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey.
 			}
+			
 			//A for loop that will flash an LED according to the number assigned at the current index position
 			for (int indexToFlash = 0; indexToFlash < sequenceKey.size(); indexToFlash++)
 			{
@@ -94,16 +95,17 @@ public class Sequence
 					greenLED.setState(false);
 				}
 				Thread.sleep(500);
-			}			
-			numEvents = 0;
-			userAnswer.clear();
+			}
+			
+			numEvents = 0; //resets number of events pressed before the user answers
+			userAnswer.clear(); //clears ArrayList for the users answers before each answer
 			System.out.println("Please enter your answer");
-			//While loop that checks if the users answer is complete
-			while (numEvents < sequenceKey.size())
+			while (numEvents < sequenceKey.size()) //While loop that checks if the users answer is complete
 			{
 				redLED.setState(turnRedLEDOn);
 				greenLED.setState(turnGreenLEDOn);
-			}			
+			}
+			
 			//A for loop that will take in the users answers and compare it to the sequence answer key. Determines if the user incorrect. if incorrect, the game will stop
 			for (int indexToCompare = 0; indexToCompare < sequenceKey.size(); indexToCompare++)
 			{
@@ -117,8 +119,8 @@ public class Sequence
 					break;
 				}
 			}
-			//If the user was correct on all, the game will continue
-			if(continueGame)
+			
+			if (continueGame) //If the user was correct on all, the game will continue
 			{
 				//Indicates the user got the sequence correct
 				greenLED.setState(true); 
