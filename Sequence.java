@@ -1,7 +1,12 @@
 import com.phidget22.*;//Add Phidgets Library.
 import java.util.ArrayList;
 public class Sequence 
-{
+{	
+	//Global variable for the number of button events. Represents the number of answers recorded.
+	public static int numEvents = 0;
+	//Turn on/off LEDs with Global Variables
+	static boolean turnRedLEDOn = false;
+	static boolean turnGreenLEDOn = false;
 	//Handle Exceptions
 	public static void main(String[] args) throws Exception
 	{
@@ -37,11 +42,12 @@ public class Sequence
 		{
 			public void onStateChange(DigitalInputStateChangeEvent e)
 			{
+				turnRedLEDOn = e.getState();
 				if(e.getState())
 				{
 					userAnswer.add(0);
-				}
-				
+					numEvents++;
+				}			
 			}
 		});
 		//Event
@@ -49,28 +55,29 @@ public class Sequence
 		{
 			public void onStateChange(DigitalInputStateChangeEvent e)
 			{
+				turnGreenLEDOn = e.getState();
 				if(e.getState())
 				{
 					userAnswer.add(1);
+
+					numEvents++;
 				}
-			}
-				
-		});
-		
-		//Process that determines the sequence of the flashing lights.
-		//A for loop that assigns an integer of 0 or 1 to the sequenceKey ArrayList until filled to startingNumberOfColours.
+			}			
+		});		
+		//int variable stating the number of colours flashed the game will start with.
 		int startingNumberOfColours = 3;
-		for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
-		{	//Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey
-			sequenceKey.add((int)(Math.random() * 2));
-		}
-		
-		int numEvents = 0;
-		System.out.println("Starting game...");
+		System.out.println("Starting game, look at the LEDs.");
+		Thread.sleep(1000);
 		boolean continueGame = true;
 		//Loop that keeps game going
 		while (continueGame == true)
-		{	
+		{
+			sequenceKey.clear();
+			//Process that determines the sequence of the flashing lights.
+			for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
+			{	//Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey
+				sequenceKey.add((int)(Math.random() * 2));
+			}
 			//A for loop that will flash an LED according to the number assigned at the current index position
 			for (int indexToFlash = 0; indexToFlash < sequenceKey.size(); indexToFlash++)
 			{
@@ -87,58 +94,43 @@ public class Sequence
 					greenLED.setState(false);
 				}
 				Thread.sleep(500);
-			}
-			
+			}			
+			numEvents = 0;
+			userAnswer.clear();
+			System.out.println("Please enter your answer");
 			//While loop that checks if the users answer is complete
-			/*
-			boolean completedAnswer = false;
-			while (completedAnswer == false)
+			while (numEvents < sequenceKey.size())
 			{
-				if (userAnswer.size() == sequenceKey.size())
-				{
-					completedAnswer = true;
-				}
-				
-				if (redButton.getState())
-				{//Adds a 0 to the users answer key.
-					redLED.setState(true);
-					Thread.sleep(250);
-					redLED.setState(false);
-					userAnswer.add(0);
-				}
-				else if (greenButton.getState())
-				{//Adds a 1 to the users answer key
-					greenLED.setState(true); 
-					Thread.sleep(250);
-					greenLED.setState(false);
-					userAnswer.add(1);
-				}
-				Thread.sleep(150);
-			}*/
-			
-			//A for loop that will take in the users answers and compare it to the sequence answer key. Determines if the user is correct or incorrect. If correct, game moves on. If incorrect, game stops.
+				redLED.setState(turnRedLEDOn);
+				greenLED.setState(turnGreenLEDOn);
+			}			
+			//A for loop that will take in the users answers and compare it to the sequence answer key. Determines if the user incorrect. if incorrect, the game will stop
 			for (int indexToCompare = 0; indexToCompare < sequenceKey.size(); indexToCompare++)
 			{
 				if (userAnswer.get(indexToCompare) != sequenceKey.get(indexToCompare))
 				{//Indicates the user got the sequence incorrect
-					redLED.setState(true); 
-					Thread.sleep(3000);
+					redLED.setState(true);
+					System.out.println("Game over...");
+					Thread.sleep(2000);
 					redLED.setState(false);
 					continueGame = false;
-					System.out.print("Game over...");
+					break;
 				}
-				else
-				{//Indicates the user got the sequence correct
-					greenLED.setState(true); 
-					Thread.sleep(3000);
-					greenLED.setState(false);
-					startingNumberOfColours += 1; //Adds 1 colour for the next level.
-					System.out.println("Starting next level...");
-				}
+			}
+			//If the user was correct on all, the game will continue
+			if(continueGame)
+			{
+				//Indicates the user got the sequence correct
+				greenLED.setState(true); 
+				System.out.println("Congrats!");
+				Thread.sleep(2000);
+				greenLED.setState(false);
+				Thread.sleep(1000);
+				System.out.println("\n" + "Starting next level...");
+				Thread.sleep(2000);
+				startingNumberOfColours++;		
 			}
 			Thread.sleep(150);
 		}
-
 	}
-
 }
