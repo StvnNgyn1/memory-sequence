@@ -43,7 +43,7 @@ public class Sequence
 			public void onStateChange(DigitalInputStateChangeEvent e)
 			{
 				turnRedLEDOn = e.getState();
-				if(e.getState())
+				if (e.getState())
 				{
 					userAnswer.add(0);
 					numEvents++;
@@ -56,7 +56,7 @@ public class Sequence
 			public void onStateChange(DigitalInputStateChangeEvent e)
 			{
 				turnGreenLEDOn = e.getState();
-				if(e.getState())
+				if (e.getState())
 				{
 					userAnswer.add(1);
 					numEvents++;
