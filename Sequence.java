@@ -59,7 +59,6 @@ public class Sequence
 				if(e.getState())
 				{
 					userAnswer.add(1);
-
 					numEvents++;
 				}
 			}			
