@@ -59,7 +59,6 @@ public class Sequence
 				if(e.getState())
 				{
 					userAnswer.add(1);
-
 					numEvents++;
 				}
 			}			
@@ -99,11 +98,12 @@ public class Sequence
 			
 			numEvents = 0; //resets number of events pressed before the user answers
 			userAnswer.clear(); //clears ArrayList for the users answers before each answer
-			System.out.println("Please enter your answer");
+			System.out.println("Please enter your answer:");
 			while (numEvents < sequenceKey.size()) //While loop that checks if the users answer is complete
 			{
 				redLED.setState(turnRedLEDOn);
 				greenLED.setState(turnGreenLEDOn);
+				Thread.sleep(150);
 			}
 			
 			//A for loop that will take in the users answers and compare it to the sequence answer key. Determines if the user incorrect. if incorrect, the game will stop
