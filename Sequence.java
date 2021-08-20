@@ -69,11 +69,11 @@ public class Sequence
 		Thread.sleep(1000);
 		boolean continueGame = true; //Boolean that determines if while loop below should continue or not.
 		//Loop that keeps game going
-		while (continueGame == true) 
+		while (continueGame) 
 		{
 			sequenceKey.clear(); //Ensures the sequence is reset for each level
 			//Process that determines the sequence of the flashing lights until the starting number of colours are met.
-			for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
+			for (int i = 0; i < startingNumberOfColours; i++)
 			{	
 				sequenceKey.add((int)(Math.random() * 2)); //Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey.
 			}
