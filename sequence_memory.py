@@ -16,17 +16,15 @@ userAnswer = []
 
 #Event
 def onRedButton_StateChange(self, state):
-    global turnRedLEDOn
     global numEvents
-    turnRedLEDOn = state
+    redLED.setState(state)
     if (state):
         userAnswer.append(0)
         numEvents+=1
 #Event
 def onGreenButton_StateChange(self, state):
-    global turnGreenLEDOn
     global numEvents
-    turnGreenLEDOn = state
+    greenLED.setState(state)
     if (state):
         userAnswer.append(1)
         numEvents+=1
@@ -56,17 +54,13 @@ greenLED.openWaitForAttachment(1000)
 #Subscribe to Events 
 redButton.setOnStateChangeHandler(onRedButton_StateChange)
 greenButton.setOnStateChangeHandler(onGreenButton_StateChange)
-
-#Global variables to turn on/off LEDS
-turnRedLEDOn = False
-turnGreenLEDOn = False
     
 startingNumberOfColours = 3 #int variable stating the number of colours flashed the game will start with.   
 print("Starting game, look at the LEDS.")
 time.sleep(1)
 continueGame = True #Boolean that determines if while loop below should continue or not.
 #Loop that keeps game going
-while continueGame == True:
+while (continueGame):
     sequenceKey.clear() #Ensures the sequence is reset for each level
     #Process that determines the sequence of the flashing lights until the starting number of colours are met.
     for indexToAssign in range(startingNumberOfColours):
@@ -76,21 +70,21 @@ while continueGame == True:
     for indexToFlash in range(len(sequenceKey)):
         if sequenceKey[indexToFlash] == 0: #0 is assigned to red
             redLED.setState(True)
-            time.sleep(0.500)
+            time.sleep(0.5)
             redLED.setState(False)
         else: #Only other option is 1, which is assigned to green.
             greenLED.setState(True)
-            time.sleep(0.500)
+            time.sleep(0.5)
             greenLED.setState(False)
-        time.sleep(0.500)
+        time.sleep(0.5)
     
     numEvents = 0#resets number of events pressed before the user answers
     userAnswer.clear()#//clears list for the users answers before each answer
     print("Please enter your answer:")
     while (numEvents < len(sequenceKey)):#While loop that checks if the users answer is complete
-        redLED.setState(turnRedLEDOn)
-        greenLED.setState(turnGreenLEDOn)
-        time.sleep(0.150)
+        #redLED.setState(turnRedLEDOn)
+        #greenLED.setState(turnGreenLEDOn)
+        time.sleep(0.15)
     
     #A for loop that will take in the users answers and compare it to the sequence answer key. Determines if the user incorrect. if incorrect, the game will stop
     for indexToCompare in range(len(sequenceKey)):
@@ -114,4 +108,4 @@ while continueGame == True:
         time.sleep(2)
         startingNumberOfColours+=1 #Adds a colour for the next level.
         
-    time.sleep(0.150)
+    time.sleep(0.15)
