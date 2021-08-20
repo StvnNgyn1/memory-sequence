@@ -74,11 +74,11 @@ namespace SequenceMemory
             System.Threading.Thread.Sleep(1000);
             bool continueGame = true; //Boolean that determines if while loop below should continue or not.
             //Loop that keeps game going
-            while (continueGame  == true)
+            while (continueGame)
             {
                 sequenceKey.Clear(); //Ensures the sequence is reset for each level
                 //Proccess that determines the sequence of the flashing lights until the starting number of colours are met.
-                for (int indexToAssign = 0; indexToAssign < startingNumberOfColours; indexToAssign++)
+                for (int i = 0; i < startingNumberOfColours; i++)
                 {//Randomly generates number between 0 and 1 to add to the ArrayList sequenceKey
                     int randomNumber = RNG.Next(0, 2);
                     sequenceKey.Add(randomNumber);
